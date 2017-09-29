@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Facelet Title</title>
+        <h:outputStylesheet name="../bootstrap/css/bootstrap.css" position="last" /> 
+        <h:outputStylesheet name="../boots-mat/css/bootstrap-material-design.min.css" position="last"/>
+        <h:outputStylesheet name="../boots-mat/css/ripples.min.css" position="last" /> 
+    </h:head>
+    <h:body>
+        <ui:composition template="/template/common/commonLayout.xhtml" >
+            <ui:define name="content">
+                <h:form id="form" class="container">
+                    <p:outputLabel value="destination" for="sortie"/>
+                    <p:selectOneMenu id="sortie" value="#{sortieManagedBean.destinationId}">
+                        <f:selectItems value="#{sortieManagedBean.destinations}" var="destination" itemLabel="#{destination.nomDestination}" itemValue="#{destination.idDestination}"/>
+                    </p:selectOneMenu>
+                    <h:panelGroup id="table">
+                        <p:dataTable value="#{sortieManagedBean.ligneCom}" var="ligneCommande">
+                            <p:column headerText="produit">
+                                <p:outputLabel value="#{ligneCommande.idProduit.nomProduit}"/>
+                            </p:column>
+                            <p:column headerText="quantite">
+                                <p:outputLabel value="#{ligneCommande.quantite}"/>
+
+                            </p:column>
+                            <p:column>
+
+                                <p:commandButton actionListener="#{sortieManagedBean.supprimerLigne(ligneCommande.idProduit.idProduit)}" 
+                                                 value="supprimer" update="@form"/>
+                                <p:commandButton oncomplete="PF('modifier').show()" value="modifier" update=":form">
+                                    <f:setPropertyActionListener value="#{ligneCommande}" target="#{sortieManagedBean.ligneCommande}" /> 
+                                </p:commandButton>
+
+                            </p:column>
+
+                        </p:dataTable>
+                        <h:panelGroup id="modifierDialog">
+                            <p:dialog widgetVar="modifier" header="modifier la ligne">
+
+                                <p:outputLabel value="produit" for="modifProduit"/>
+                                <p:outputLabel id="modifProduit" value="#{ligneCommande.idProduit.nomProduit}" />
+                                <p:outputLabel value ="quantite" for="modifQuantite"/>
+                                <p:inputNumber id="modifQuantite" value="#{sortieManagedBean.modifQuantite}" decimalPlaces="0"/>
+                                <p:commandButton actionListener="#{sortieManagedBean.modifierLigne()}" value="modifier" onclick="PF('modifier').hide()" update="@form"/>
+
+                            </p:dialog>
+                        </h:panelGroup>
+
+                    </h:panelGroup>
+                    <p:commandButton value="Ajouter produit" onclick="PF('insert').show()"/>
+                    <p:commandButton value="Confirmer la sortie" actionListener="#{sortieManagedBean.ajouterSortie()}"/>
+                    <p:dialog widgetVar="insert" header="ajouter une ligne">
+                        <p:outputLabel for="ajouterLigneProduit" value="produit"/>
+
+                        <p:selectOneMenu id="ajouterLigneProduit" value="#{sortieManagedBean.produitId}" required="true">
+                            <f:selectItems value="#{sortieManagedBean.produits}" var="produit" itemValue="#{produit.idProduit}" itemLabel="#{produit.nomProduit}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel for="ajouterLigneQuantite"  value ="quantite"/>
+                        <p:inputNumber id="ajouterLigneQuantite" value="#{sortieManagedBean.quantite}" required="true" decimalPlaces="0" />
+
+                        <p:commandButton actionListener="#{sortieManagedBean.ajouterLigneCommande()}" value="ajouter" onclick="PF('insert').hide()" process="@form" update="@form"/>
+
+                    </p:dialog>
+
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </h:body>
+</html>
+

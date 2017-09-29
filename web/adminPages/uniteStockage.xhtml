@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title> unite de stockage management</title>
+        <h:outputStylesheet name="bootstrap/css/bootstrap.css" position="last" /> 
+        <h:outputStylesheet name="boots-mat/css/bootstrap-material-design.min.css" position="last"/>
+        <h:outputStylesheet name="boots-mat/css/ripples.min.css" position="last" /> 
+    </h:head>
+    <h:body>
+        <ui:composition template="/template/common/commonAdminLayout.xhtml" >
+            <ui:define name="content">
+                <h:form id="form" class="container">
+                    <h:panelGroup id="table">
+                        <p:dataTable value="#{uniteStockageManagedBean.listUnite}" var="ligne">
+                            <p:column headerText="nom">
+                                <p:outputLabel value="#{ligne.nom}"/>
+                            </p:column>
+                            <p:column>
+                                <p:commandButton value="modifier" oncomplete="PF('modifier').show()" update=":form:modifierDialog" process="@this">
+                                    <f:setPropertyActionListener target="#{uniteStockageManagedBean.modifUniteStockage}" value="#{ligne}"/>
+                                </p:commandButton>
+                            </p:column>
+
+                        </p:dataTable>
+                    </h:panelGroup>
+
+                    <p:commandButton value="ajouter une nouvelle unite" class="btn-success" onclick="PF('insert').show()"/>
+
+
+                    <h:panelGroup id="modifierDialog">
+                        <p:dialog header="modifier une unite de stockage" widgetVar="modifier">
+                            <p:outputLabel for="modifNomUniteStockage" value="nom de l'unite de stockage : "/>
+                            <p:inputText id="modifNomUniteStockage" value="#{uniteStockageManagedBean.modifUniteStockage.nom}" required="true"/>
+                            <p:commandButton value="modifier" class="btn-success" actionListener="#{uniteStockageManagedBean.modifier()}" 
+                                             oncomplete="PF('modifier').hide()" update=":form:table" process=":form:modifierDialog"/>
+                        </p:dialog>
+                    </h:panelGroup>
+
+
+                    <h:panelGroup id="ajouterDialog">
+                        <p:dialog header="Nouvelle Unite de mesure" widgetVar="insert">
+                            <p:outputLabel value="nom : " for="ajoutNom"/>
+                            <p:inputText id="ajoutNom" value="#{uniteStockageManagedBean.uniteStockage.nom}" required="true"/>
+                            <p:commandButton value="ajouter" actionListener="#{uniteStockageManagedBean.ajouterUnite}" onclick="PF('insert').hide()" update="@form" process=":form:ajouterDialog"></p:commandButton>
+                        </p:dialog>
+                    </h:panelGroup>
+
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

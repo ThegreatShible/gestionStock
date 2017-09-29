@@ -1,0 +1,213 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets" 
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core">
+    <h:form id="TitreCongeAddForm">
+        <p:dialog id="addTitre" modal="true" widgetVar="addTitre" 
+                  closable="true" resizable="false" position="top" style="margin-top: 200px;" width="800px">
+            <f:facet name="header">
+                <h:panelGroup rendered="#{congeBean.selectedTitreOld eq null}">
+                    <span class="glyphicon glyphicon-plus-sign"></span>
+                    Add - 
+                </h:panelGroup>
+                <h:panelGroup rendered="#{not(congeBean.selectedTitreOld eq null)}">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                    Edit - 
+                </h:panelGroup>
+                <h:outputText value="Titre de congé #{congeBean.selectedTitreConge.natureConge}"/>
+            </f:facet>
+            
+            <p:ajax event="close" oncomplete="PF('titresCongeExceptionnelDT').filter();PF('titresCongeDT').filter();" 
+                    listener="#{congeBean.resetSelectedTitreConge()}" />
+            
+            <h:panelGroup id="droitCongeAddPanelGroup" style="text-align: left;">
+                <p:separator style="border:0;border-bottom: 1px dotted #000000;margin-bottom: 10px;"/>
+                <table class="row" style="width: 100%;">
+                    <tr>
+                        <td class="col-xs-7" style="vertical-align: middle;">
+                            <h:panelGroup rendered="#{congeBean.selectedTitreConge.natureConge eq 'Exceptionnel'}">
+                                <h:panelGroup id="p4">
+                                    <div class="row">
+                                        <div class="pull-left" style="padding-left: 15px;">
+                                            <h:panelGroup id="p3">
+                                                <p:outputLabel value="Motif de congé :" />
+                                            </h:panelGroup>
+                                        </div>
+                                        <div class="pull-right" style="padding-right: 15px;" >
+
+                                                <p:selectOneMenu value="#{congeBean.selectedTitreConge.motifConge}" id="motifConge"
+                                                                 style="width: 220px;">
+                                                    <f:selectItems value="#{congeBean.motifs}"/>
+                                                    <p:ajax process="@this" update="p7,p1,p2,p3,messages" 
+                                                            listener="#{congeBean.resetMotif()}" />
+                                                </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                </h:panelGroup>
+                                <div class="row" style="margin-top: 5px;">
+                                    <div class="col-xs-12" >
+                                        <p:outputLabel value="Observation" for="Observation"/><br/>
+                                        <p:inputTextarea style="width: 100%;" rows="3" autoResize="false" scrollHeight="300"
+                                                         value="#{congeBean.selectedTitreConge.observation}" id="Observation" >
+
+                                        </p:inputTextarea>
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+                            <h:panelGroup id="p0" rendered="#{congeBean.selectedTitreConge.natureConge eq 'Annuel'}">
+                                <div class="row" >
+                                    <div class="col-xs-12" >
+                                        <h:panelGroup rendered="#{congeBean.selectedTitreConge.natureConge eq 'Annuel'}">
+                                            <div class="row">
+                                                <div class="pull-left" style="padding-left: 15px;">
+                                                    <p:outputLabel value="Exercice" for="exercice"/>
+                                                </div>
+                                                <div class="pull-right" style="padding-right: 15px;" >
+                                                    <p:inputMask style="width: 200px;" value="#{congeBean.selectedTitreConge.exercice}" 
+                                                                    readonly="#{not (congeBean.selectedTitreOld eq null)}"
+                                                                    required="true" id="exercice" mask="9999/9999">
+                                                           <p:ajax  event="keyup" process="@this" update="messages" 
+                                                               listener="#{congeBean.calculate3()}"/>
+                                                    </p:inputMask>
+                                                </div>
+                                            </div>
+                                            
+                                        </h:panelGroup>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top: 5px;">
+                                    <div class="col-xs-12" >
+                                        <p:outputLabel value="Observation" /><br/>
+                                        <p:inputTextarea style="width: 100%;" rows="3" autoResize="false" scrollHeight="300"
+                                                         value="#{congeBean.selectedTitreConge.observation}"  >
+
+                                        </p:inputTextarea>
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+                        </td>
+                        <td class="col-xs-1" >
+                            <span class="vSeparator" style="display: block;height: 150px;"></span>
+                        </td>
+                        <td class="col-xs-4" style="vertical-align: middle;">
+                            <div class="row">
+                                <div class="col-xs-12" >
+                                    <h:panelGroup id="p78">
+                                        <p:outputLabel value="Référence" for="ref"/><br/>
+                                        <p:inputText id="ref" style="width: 250px;" required="true"
+                                                     value="#{congeBean.selectedTitreConge.ref}" />
+                                    </h:panelGroup>
+                                </div>   
+                            </div>
+                            <div class="row" style="margin-top: 15px;">
+                                <div class="col-xs-12" >
+                                    <h:panelGroup id="p77">
+                                        <p:outputLabel value="Date de la demadne" for="dateDemane"/><br/>
+                                        <p:calendar id="dateDemane" value="#{congeBean.selectedTitreConge.dateDemane}" 
+                                                    navigator="true"
+                                                    styleClass="calendar" readonlyInput="true" showOn="button"
+                                                    locale="fr" pattern="dd/MM/yyyy" mask="true">
+                                        </p:calendar>
+                                    </h:panelGroup>
+                                </div>   
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <p:separator style="border:0;border-bottom: 1px solid rgb(22, 164, 255);margin-bottom: 10px;"/>
+                <table class="row" style="width: 100%;text-align: center;">
+                    <tr>
+                        <td class="col-xs-4" style="vertical-align: top;">
+                            <h:panelGroup id="p7" >
+                                <p:outputLabel value="Durée" for="duree"
+                                               rendered="#{congeBean.selectedTitreConge.natureConge eq 'Exceptionnel'}"
+                                               style="display: inline-block;width: 132px;text-align: left;" />
+                                <p:spinner  style="width: 132px;" rendered="#{congeBean.selectedTitreConge.natureConge eq 'Exceptionnel'}"
+                                            id="duree"
+                                            value="#{congeBean.joursAPrendreTitre}"  min="0.5" stepFactor="0.5">
+                                    
+                                    <f:validateDoubleRange  minimum="0.5"/>
+                                </p:spinner>
+
+                                <p:outputLabel value="Durée" for="dureee"
+                                               rendered="#{congeBean.selectedTitreConge.natureConge eq 'Annuel'}"
+                                               style="display: inline-block;width: 132px;text-align: left;" />
+                                <p:spinner  style="width: 132px;" rendered="#{congeBean.selectedTitreConge.natureConge eq 'Annuel'}"
+                                            id="dureee"
+                                            value="#{congeBean.joursAPrendreTitre}"  min="0.5" max="30" stepFactor="0.5">
+                                    <p:ajax process="@this" update="p1,p2,messages" 
+                                            listener="#{congeBean.calculate8()}"/>
+                                    <p:ajax event="keyup" process="@this" update="p1,p2,messages" 
+                                            listener="#{congeBean.calculate8()}"/>
+                                    <f:validateDoubleRange maximum="30" minimum="0.5"/>
+                                </p:spinner>
+                            </h:panelGroup>
+                        </td>
+                        <td class="col-xs-4" style="vertical-align: top;border-left: 1px solid rgb(22, 164, 255);border-right:  1px solid rgb(22, 164, 255);padding-bottom: 8px;">
+                            <h:panelGroup id="p1">
+                                <p:outputLabel value="Date début" for="congeDateDeb" style="display: inline-block;width: 132px;text-align: left;"/>
+                                <p:calendar id="congeDateDeb" value="#{congeBean.selectedTitreConge.congePK.dateDeb}"
+                                            navigator="true" style="display: inline-block;"
+                                            styleClass="calendar" readonlyInput="true" required="true"  showOn="button"
+                                            locale="fr" pattern="dd/MM/yyyy" mask="true">
+                                    <p:ajax event="dateSelect" process="motifConge,@this" update="p1,p2,p7,p3,messages" 
+                                            listener="#{congeBean.calculate3()}"/>
+                                </p:calendar>
+                            </h:panelGroup>
+                        </td>
+                        <td class="col-xs-4" style="vertical-align: top;">
+                            <h:panelGroup id="p2">
+                                <p:outputLabel value="Date retour" for="congeDateFin" style="display: inline-block;width: 132px;text-align: left;"/>
+                                <p:calendar id="congeDateFin" value="#{congeBean.selectedTitreConge.congePK.dateFin}" 
+                                            navigator="true" style="display: inline-block;"
+                                            required="true" readonlyInput="true" styleClass="calendar" showOn="button"
+                                            locale="fr" pattern="dd/MM/yyyy">
+                                    <p:ajax event="dateSelect" process="@this" update="p1,p2,p7,p3,messages" 
+                                            listener="#{congeBean.calculate7()}"/>
+                                </p:calendar>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                </table>
+            </h:panelGroup>     
+                <p:separator style="border:0;border-bottom: 1px solid rgb(22, 164, 255);margin-bottom: 10px;"/>
+                <div class="row">
+                    <div class="col-xs-12" style="text-align: left;">
+                        <p:messages id="messages" showDetail="true" closable="true" style="text-align: left;" />
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-xs-8" style="text-align: left;">
+                        <h:panelGroup id="o478">
+                            <h:panelGroup rendered="false">
+                                <h:panelGroup rendered="#{congeBean.selectedTitreConge.natureConge eq 'Annuel'}">
+                                    <p:selectBooleanCheckbox value="#{congeBean.soustraire}" />
+                                    <h:outputText value="Soustraire le nombre de jours de l'exercice en question " style="margin-top: 5px;" />
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </div>
+                    <div class="col-xs-4" style="text-align: right;">
+                        <p:commandButton value="OK" onclick="loading();"
+                                         update="droitCongeAddPanelGroup,:recap,messages"
+                                         rendered="#{congeBean.selectedTitreOld eq null}"
+                                         oncomplete="loadingHide();if (args &amp;&amp; !args.validationFailed) {PF('titresCongeDT').unselectAllRows();PF('titresCongeExceptionnelDT').unselectAllRows();PF('titresCongeDT').filter();PF('titresCongeExceptionnelDT').filter();PF('demandeCongeDT').filter();PF('droitCongeDT').filter();PF('addTitre').hide()}"
+                                         action="#{congeBean.addTitreConge()}"
+                                         style="padding: 5px 10px;font-size: 14px;"/>
+                        
+                        <p:commandButton value="OK" onclick="loading();"
+                                         update="droitCongeAddPanelGroup,:recap,messages"
+                                         rendered="#{not (congeBean.selectedTitreOld eq null)}"
+                                         oncomplete="loadingHide();if (args &amp;&amp; !args.validationFailed) {PF('titresCongeDT').unselectAllRows();PF('titresCongeExceptionnelDT').unselectAllRows();PF('titresCongeDT').filter();PF('titresCongeExceptionnelDT').filter();PF('demandeCongeDT').filter();PF('droitCongeDT').filter();PF('addTitre').hide()}"
+                                         action="#{congeBean.editTitreConge()}"
+                                         style="padding: 5px 10px;font-size: 14px;"/>
+                    </div>
+                </div>
+                
+               
+        </p:dialog>     
+    </h:form>
+</ui:composition>

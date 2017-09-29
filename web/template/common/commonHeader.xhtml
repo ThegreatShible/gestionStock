@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      lang="fr"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition>
+            <nav class="navbar navbar-danger blackNavbar navbar-fixed-top">
+                <div class="container-fluid no-margin-left" >
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <h:graphicImage value="/resources/images/logo.png" /> 
+
+                        <a class="navbar-brand" href="#">Agenda</a>
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse pad-right-15" aria-expanded="false" style="height: 1px;">
+                        <ul class="nav navbar-nav navbar-right">
+                             <li>
+                                <a href="/templ/faces/userPages/entrees.xhtml">
+                                    <i>Creation entree</i>
+                                </a>
+                            </li>
+                             <li>
+                                <a href="/templ/faces/userPages/sorties.xhtml">
+                                    <i>Creation sortie</i>
+                                </a>
+                            </li>
+                             <li>
+                                <a href="/templ/faces/bothPages/EtatStock.xhtml">
+                                    <i>Etat du stock</i>
+                                </a>
+                            </li>
+                             <li>
+                                <a href="/templ/faces/bothPages/traffic.xhtml">
+                                    <i>Traffic</i>
+                                </a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="material-icons">account_circle</i>  
+                                    Utilisateur
+                                    <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="#">
+                                            <i class="material-icons drop-icons text-danger">power_settings_new</i>
+                                            Déconnexion
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h:form>
+                                    <p:commandLink value="deconnexion"  action="#{logoutManagedBean.redirect()}"/>
+                                </h:form>
+                            </li>
+                        </ul>
+                        
+                    </div><!--/.nav-collapse -->
+                </div>
+            </nav>
+            <br/>
+            <br/>
+
+
+           <!-- <div class="row header-cover-container"/>
+                <div class="header-filter-cover"></div>
+                <div class="header-cover"></div>
+            </div> !-->
+
+        </ui:composition>
+    </h:body>
+</html>
+

@@ -1,0 +1,154 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets" 
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core">
+        <p:dialog id="addDemande" modal="true" widgetVar="addDemande" header="Demande de congé"
+                  showEffect="clip" hideEffect="clip" 
+                  closable="true" resizable="false" position="top" width="700px" style="margin-top: 70px;">
+            <p:ajax event="close" listener="#{congeBean.resetDemande()}" />
+            <h:panelGroup id="droitCongeAddPanelGroup" style="text-align: left;">
+                <div class="row">
+                <table class="row" style="width: 100%;margin: 0;">
+                    <tr>
+                        <td class="col-xs-12" style="vertical-align: top;">
+                            <div class="row">
+                                <div class="col-xs-7" style="margin-left: -15px;" >
+                                    <div class="col-xs-12" style="background: #12a3ff;color: #ffffff;">
+                                        <p:selectOneRadio id="natureConge" required="true" disabled="#{congeBean.droitAuConge eq 0}"
+                                                      value="#{congeBean.selectedDemande.natureConge}" >
+                                                    <f:selectItem itemLabel="Annuel" itemValue="Annuel" />
+                                                    <f:selectItem itemLabel="Exceptionnel" itemValue="Exceptionnel" />
+                                                <p:ajax process="@this" listener="#{congeBean.calculate()}" immediate="true" 
+                                                        update="nbr,p1,p2,p3,p4,messages,exercices" />
+                                            </p:selectOneRadio>
+                                    </div>
+                                    <div class="col-xs-5" style="margin-top: 10px;padding: 0;text-align: center;" >
+                                        <h:panelGroup id="p3">
+                                            <p:outputLabel rendered="#{congeBean.selectedDemande.natureConge eq 'Exceptionnel'}" value="Motif de congé :" for="motifConge" />
+                                        </h:panelGroup>
+                                    </div>
+                                    <div class="col-xs-7" style="padding-right: 0;margin-top: 10px;" >
+                                        <h:panelGroup id="p4">
+                                            <p:selectOneMenu value="#{congeBean.selectedDemande.motifConge}"
+                                                             rendered="#{congeBean.selectedDemande.natureConge eq 'Exceptionnel'}"
+                                                             id="motifConge"
+                                                             required="true" style="width:200px;">
+                                                <f:selectItems value="#{congeBean.motifs}"/>
+                                                <p:ajax process="@this" update="nbr,p1,p2,p3,p4,messages,exercices" 
+                                                        listener="#{congeBean.calculate()}" />
+                                            </p:selectOneMenu>
+                                        </h:panelGroup>
+                                    </div>
+                                </div>   
+
+                                <div class="col-xs-5" style="padding-right: 0;">
+                                    <h:panelGroup id="nbr">
+                                        <h3 style="color: #12a3ff;margin: 0;border: 1px solid #12a3ff;float: right;padding: 5px 10px;">
+                                            <p:spinner rendered="#{congeBean.selectedDemande.natureConge eq 'Exceptionnel'}" style="width: 140px;" value="#{congeBean.joursAPrendre}" min="0.5" stepFactor="0.5">
+                                                <p:ajax process="@this" listener="#{congeBean.calculate9()}"
+                                                        update="p1,p2,messages,exercices"  />
+                                                <p:ajax event="keyup" process="@this" listener="#{congeBean.calculate9()}"
+                                                        update="p1,p2,messages,exercices"  />
+                                            </p:spinner>
+
+                                            <p:spinner rendered="#{not (congeBean.selectedDemande.natureConge eq 'Exceptionnel')}" style="width: 140px;" value="#{congeBean.joursAPrendre}" min="0.5" max="#{congeBean.droitAuConge}" stepFactor="0.5">
+                                                <p:ajax process="@this" listener="#{congeBean.calculate9()}"
+                                                        update="p1,p2,messages,exercices"  />
+                                                <p:ajax event="keyup" process="@this" listener="#{congeBean.calculate9()}"
+                                                        update="p1,p2,messages,exercices"  />
+                                            </p:spinner>
+
+
+                                            <h:outputText value=" Jours"/>
+                                        </h3>
+                                    </h:panelGroup>
+                                </div>
+                            </div>
+                            
+                      
+                            <p:separator style="border:0;border-bottom: 1px dotted #000000;;margin-bottom: 10px;"/>
+                            
+                            <div class="row"  style="margin-top: 15px;">
+                                <div class="col-xs-6" >
+                                    <h:panelGroup id="p1">
+                                        <p:outputLabel value="Date début" for="congeDateDeb"/><br/>
+                                        <p:calendar id="congeDateDeb" value="#{congeBean.selectedDemande.demanePK.congeDateDeb}" 
+                                                    styleClass="calendar" readonlyInput="true" required="true" showOn="button"
+                                                    mindate="#{congeBean.minDate}" navigator="true"
+                                                    locale="fr" pattern="dd/MM/yyyy" mask="true">
+                                            <p:ajax event="dateSelect" process="@this,motifConge" update="nbr,p1,p2,p3,p4,messages,exercices" 
+                                                    listener="#{congeBean.calculate()}"/>
+                                        </p:calendar>
+                                        <p:message for="congeDateDeb" />
+                                    </h:panelGroup>
+                                </div>
+                                <div class="col-xs-1" >
+                                    <span class="vSeparator" style="display: block;height: 60px;"></span>
+                                </div>
+                                <div class="col-xs-5" >
+                                    <h:panelGroup id="p2">
+                                        <p:outputLabel value="Date prévue du retour" for="congeDateFin"/><br/>
+                                        <p:calendar id="congeDateFin" value="#{congeBean.selectedDemande.demanePK.congeDateFin}" 
+                                                    required="true" readonlyInput="true" styleClass="calendar" 
+                                                    mindate="#{congeBean.minDate}" showOn="button" navigator="true"
+                                                    locale="fr" pattern="dd/MM/yyyy">
+                                            <p:ajax event="dateSelect" process="@this,motifConge" update="nbr,p1,p2,p3,p4,messages,exercices" 
+                                                    listener="#{congeBean.calculate()}"/>
+                                        </p:calendar>
+                                        <p:message for="congeDateFin" />
+                                    </h:panelGroup>
+                                </div>  
+                            </div>
+                            <h:panelGroup id="exercices">
+                                <div class="row" style="margin:0;margin-top: 15px;">
+                                    <h:panelGroup rendered="#{congeBean.joursAPrendre gt 0 and congeBean.selectedDemande.natureConge eq 'Annuel' and not (congeBean.selectedDemande.demanePK.congeDateDeb eq null) and not(congeBean.selectedDemande.demanePK.congeDateFin eq null) }">
+                                        
+                                        <p:dataList value="#{congeBean.exercices}" var="exercice" style="padding: 0;margin: 0;" rowIndexVar="index" >
+                                            <h:panelGroup rendered="#{index eq 0}">
+                                                <div class="row" style="color: #000000;background: #eee;">
+                                                    <div class="col-xs-4"><strong>Exercice</strong></div>
+                                               </div>
+                                            </h:panelGroup>
+                                            <div class="row" style="color: #000000;">
+                                                <div class="col-xs-4"><h:outputText value="#{exercice.exercice}"/></div>
+                                                <div class="col-xs-4" style="color: #12a3ff;font-weight: bold;text-align: right"><h:outputText value="#{exercice.nbrJour}"/> jours</div>
+                                                <div class="col-xs-4" style="text-align: right"><h:outputText value="Reste #{exercice.resteAPrendre}"/> jours</div>
+                                            </div>
+                                            <h:panelGroup rendered="#{index eq (congeBean.exercices.size() - 1)}">
+                                                <div class="row" style="color: #000000;background: #eee;fon">
+                                                    <div class="col-xs-4"></div>
+                                                    <div class="col-xs-4" style="color: #12a3ff;font-weight: bold;text-align: right"><strong>Total: #{congeBean.joursAPrendre} jours</strong></div>
+                                                    <div class="col-xs-4" style="text-align: right;font-weight: bold;"><strong>Total: #{congeBean.joursRestant} jours</strong></div>
+                                                </div>
+                                            </h:panelGroup>
+                                        </p:dataList>
+                                    </h:panelGroup>
+                                    
+                                </div>
+                            </h:panelGroup>
+                        </td>
+                        
+                       
+                        
+                    </tr>
+                </table>
+                    </div> 
+            </h:panelGroup>     
+                <p:separator style="border:0;border-bottom: 1px dotted #000000;;margin-bottom: 10px;"/>
+                <div class="row">
+                    <div class="col-xs-12" style="text-align: right;">
+                        <p:messages id="messages" showDetail="true" closable="true" style="text-align: left;" />
+                        <p:commandButton value="OK" onclick="loading();"
+                                         update="messages,:usersMenu,droitCongeAddPanelGroup,:recap,:addDemandeForm:demandeCongeBtn"
+                                         oncomplete="loadingHide();if (args &amp;&amp; !args.validationFailed) {PF('titresCongeDT').filter();PF('titresCongeExceptionnelDT').filter();PF('demandeCongeDT').filter();PF('droitCongeDT').filter();PF('addDemande').hide()}"
+                                         action="#{congeBean.addDemandeConge()}"
+                                         style="padding: 5px 10px;font-size: 14px;">
+                            <f:setPropertyActionListener target="#{congeBean.demandesEnAttente}" value="#{null}"/>
+                        </p:commandButton>
+                    </div>
+                </div>
+               
+        </p:dialog>
+</ui:composition>

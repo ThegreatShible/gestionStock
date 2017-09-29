@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Facelet Title</title>
+        <h:outputStylesheet name="bootstrap/css/bootstrap.css" position="last" /> 
+        <h:outputStylesheet name="boots-mat/css/bootstrap-material-design.min.css" position="last"/>
+        <h:outputStylesheet name="boots-mat/css/ripples.min.css" position="last" /> 
+    </h:head>
+    <h:body>
+        <ui:composition template="/template/common/commonAdminLayout.xhtml" >
+            <ui:define name="content">
+                <h:form id="form" class="container">
+                    <p:dataTable value="#{destinationManagedBean.destinations}" var="destination">
+                        <p:column headerText="nom destination">
+                            <p:outputLabel value="#{destination.nomDestination}"/>
+                        </p:column>
+                        <p:column headerText="adresse">
+                            <p:outputLabel value="#{destination.adresse}"/>
+                        </p:column>
+                    </p:dataTable> 
+                    <p:commandButton value="ajouter destination" class="btn-success" onclick="PF('insert').show()"/>
+                    <p:dialog header="nouvelle destination" widgetVar="insert">
+                        <p:outputLabel value="nom destination" for="ajoutNomDestination"/>
+                        <p:inputText id="ajoutNomDestination" value="#{destinationManagedBean.destination.nomDestination}"/>
+                        <p:outputLabel for="ajoutAdresseDestination" value="adresse"/>
+                        <p:inputText id="ajoutAdresseDestination" value="#{destinationManagedBean.destination.adresse}"/>
+                        <p:commandButton value="ajouter" actionListener="#{destinationManagedBean.ajouterDestination()}" onclick="PF('insert').hide()" update="@form"/>
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

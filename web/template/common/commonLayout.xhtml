@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      lang="fr">
+    <h:head>
+        <f:facet name="first">
+            <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+            <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+            <ui:insert name="meta"/>
+            <h:outputScript name="bsf/js/moment-with-locales.min.js" />
+            
+        </f:facet>
+
+        <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700"/>
+        <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons"/>
+
+        <h:outputStylesheet name="bootstrap/css/bootstrap.css" position="last" /> 
+        <h:outputStylesheet name="boots-mat/css/bootstrap-material-design.min.css" position="last"/>
+        <h:outputStylesheet name="boots-mat/css/ripples.min.css" position="last" /> 
+
+        <ui:insert name="css"/>
+        
+        <h:outputStylesheet name="css/style.css" position="last" />
+
+        <ui:insert name="topJs" />
+        
+    </h:head>
+    <h:body>
+        <div id="page">
+            <div id="header">
+                <ui:insert name="header" >
+                    <ui:include src="/template/common/commonHeader.xhtml" />
+                </ui:insert>
+            </div>
+
+            <div id="content">
+                <ui:insert name="content" >
+                    <ui:include src="/template/common/commonContent.xhtml" />
+                </ui:insert>
+            </div>
+
+            <div id="footer">
+                <ui:insert name="footer" >
+                    <ui:include src="/template/common/commonFooter.xhtml" />
+                </ui:insert>
+            </div>
+        </div>
+
+        <b:scrollUp distance="0" animation="fade" text="" name="scrollUpCustom" />
+
+        <div id="inaction">
+            <div class="preloader pl-xxl">
+                <svg class="pl-circular" viewBox="25 25 50 50">
+                    <circle class="plc-path" cx="50" cy="50" r="20"></circle>
+                </svg>
+            </div>
+        </div>
+
+        <h:outputScript name="bootstrap/js/bootstrap.min.js" />
+        <h:outputScript name="boots-mat/js/material.min.js" /> 
+        <h:outputScript name="boots-mat/js/ripples.min.js" /> 
+
+        <f:facet name="last">
+            <script type="text/javascript">
+                PrimeFaces.locales ['fr'] = {
+                    closeText: 'Fermer',
+                    prevText: 'Précédent',
+                    nextText: 'Suivant',
+                    monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+                    monthNamesShort: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'],
+                    dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+                    dayNamesShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+                    dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+                    weekHeader: 'Semaine',
+                    firstDay: 1,
+                    isRTL: false,
+                    showMonthAfterYear: false,
+                    yearSuffix: '',
+                    timeOnlyTitle: 'Choisir l\'heure',
+                    timeText: 'Heure',
+                    hourText: 'Heures',
+                    minuteText: 'Minutes',
+                    secondText: 'Secondes',
+                    currentText: 'Maintenant',
+                    ampm: false,
+                    month: 'Mois',
+                    week: 'Semaine',
+                    day: 'Jour',
+                    allDayText: 'Toute la journée'
+                };
+
+                PrimeFaces.widget.Dialog.prototype.applyFocus = function () {
+                    var firstInput = this.jq.find(':not(:submit):not(:button):input:visible:enabled:first');
+                    if (!firstInput.hasClass('hasDatepicker')) {
+                        firstInput.focus();
+                    }
+                }
+                var currentEvent;
+
+                $(document).ready(function () {
+                    PrimeFaces.widget.ContextMenu.prototype.show = function (e) {
+                        //hide other contextmenus if any
+                        $(document.body).children('.ui-contextmenu:visible').hide();
+
+                        if (e) {
+                            currentEvent = e;
+                        }
+
+                        var win = $(window),
+                                left = e.pageX,
+                                top = e.pageY,
+                                width = this.jq.outerWidth(),
+                                height = this.jq.outerHeight();
+
+                        //collision detection for window boundaries
+                        if ((left + width) > (win.width()) + win.scrollLeft()) {
+                            left = left - width;
+                        }
+                        if ((top + height) > (win.height() + win.scrollTop())) {
+                            top = top - height;
+                        }
+
+                        if (this.cfg.beforeShow) {
+                            this.cfg.beforeShow.call(this);
+                        }
+
+                        this.jq.css({
+                            'left': left,
+                            'top': top,
+                            'z-index': ++PrimeFaces.zindex
+                        }).show();
+
+                        e.preventDefault();
+                    };
+                });
+            </script>
+        </f:facet>
+
+        <script>
+            $.material.init()
+
+            $('.form-group').addClass("label-floating");
+            
+
+            function loading() {
+                //$('#inaction').height($(document).height());
+                var top = ($(window).height() / 2) + $(window).scrollTop();
+                //$('#inaction').css('background-position', 'center ' + top + 'px');
+                $('#inaction').show();
+            }
+            function loadingHide() {
+                $('#inaction').hide();
+            }
+
+            $("body").on("click", ".details", function () {
+                $(this).parent().parent().find(".ui-row-toggler").click();
+            });
+            function rowExpansionHide(el) {
+                el.parent().parent().find(".ui-row-toggler").click();
+            }
+        </script>
+
+
+
+        <ui:insert name="bottomJs"/>
+    </h:body>
+</html>
+
