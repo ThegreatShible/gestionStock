@@ -36,7 +36,7 @@ public class LigneCommande implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected LigneCommandePK ligneCommandePK;
+    protected LigneCommandePK ligneCommandePK = new LigneCommandePK();
     @Basic(optional = false)
     @NotNull
     @Column(name = "quantite")

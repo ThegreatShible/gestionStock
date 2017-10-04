@@ -53,14 +53,17 @@ public class CategorieMangedBean implements Serializable {
     private short idType;
     
     @PostConstruct
-    public void  init(){
+    public void init(){
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
         .getRequest();
+        System.out.println(request.toString());
         String idType = request.getParameter("idType");
         System.out.println( "dans categorie idType " + idType);
         this.idType = (short)(Integer.parseInt(idType) % Short.MAX_VALUE);
+        System.out.println("idType short dans categorie  "+this.idType);
         type = facadeType.find(this.idType);
-        categorie.setType(type);    
+        categorie.setType(type);
+        System.out.println("post construction finie");
     }
 
     
@@ -76,9 +79,6 @@ public class CategorieMangedBean implements Serializable {
     public Collection<Categorie> getCategories() {
        
         Collection<Categorie> cats =  facadeCategorie.getParID(idType);
-        for(Categorie c : cats){
-            System.out.println(c);
-        }
         return cats;
     }
 

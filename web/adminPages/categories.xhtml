@@ -7,9 +7,9 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <title>Facelet Title</title>
-        <h:outputStylesheet name="bootstrap/css/bootstrap.css" position="last" /> 
-        <h:outputStylesheet name="boots-mat/css/bootstrap-material-design.min.css" position="last"/>
-        <h:outputStylesheet name="boots-mat/css/ripples.min.css" position="last" /> 
+        <h:outputStylesheet name="bootstrap/css/bootstrap.css"  /> 
+        <h:outputStylesheet name="boots-mat/css/bootstrap-material-design.min.css" />
+        <h:outputStylesheet name="boots-mat/css/ripples.min.css" /> 
     </h:head>
     <h:body>
         <ui:composition template="/template/common/commonAdminLayout.xhtml" >
@@ -24,7 +24,7 @@
 
                         </p:column>
                         <p:column>
-                            <p:commandButton  class="btn-success" value=" voir sous categorie" action="sousCategorie" process="@this"  >
+                            <p:commandButton  class="btn-success" value=" voir sous categories" action="sousCategorie.xhtml" process="@this" ajax="false" immediate="true">
                                 <f:param name="categorieId" value="#{ligne.categoriePK.idCategorie}"/>
                                 <f:param name="typeId" value="#{ligne.categoriePK.idType}"/>
                             </p:commandButton>
@@ -33,14 +33,13 @@
                     </p:dataTable>
 
                     <p:commandButton value="Ajouter Categorie" onclick="PF('insert1').show()" class="btn-success"/>
-                    <p:commandButton value="retour" class="btn-warning" process="@this" action="Type"/>
+                    <p:commandButton value="retour" class="btn-warning" process="@this" action="Type.xhtml" ajax="false" immediate="true"/>
 
 
                     <p:dialog header="Nouveau type" widgetVar="insert1">
                         <p:outputLabel for="ajoutNomCategorie" value="nom"/>
                         <p:inputText id="ajoutNomCategorie" value="#{categorieMangedBean.categorie.nomCategorie}" maxlength="20" required="true"/>
                         <p:commandButton value="ajouter" actionListener="#{categorieMangedBean.addCategorie()}" onclick="PF('insert').hide()" update="@form">
-
                         </p:commandButton>
                     </p:dialog>
                 </h:form>

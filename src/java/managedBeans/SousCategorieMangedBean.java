@@ -63,6 +63,7 @@ public class SousCategorieMangedBean implements Serializable {
     }
      @PostConstruct
     public void  init(){
+         System.out.println("dans sousCategorie");
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
         .getRequest();
         String idType = request.getParameter("typeId");

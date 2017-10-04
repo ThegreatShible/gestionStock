@@ -15,29 +15,44 @@
         <ui:composition template="#{trafficManagedBean.headerPath}" >
             <ui:define name="content">
                 <h:panelGroup class="container" >
-                    <h:form class="container">
-                        <p:outputLabel for="de" value="de" />
-                        <p:calendar id="de" value="#{trafficManagedBean.de}"  >
-                            <p:ajax event="dateSelect" process="@this" update="panelA" />
-                        </p:calendar>
-                        <h:panelGroup id="panelA" >
-                            <p:outputLabel for="a" value="a" />
-                            <p:calendar id="a" value="#{trafficManagedBean.a}"  mindate="#{trafficManagedBean.de}"/>
-                        </h:panelGroup>
-                        <h:panelGroup rendered="#{trafficManagedBean.privilege eq 'ADMINISTRATEUR'}">
-                            <p:outputLabel for="types" value="type"/>
-                            <p:selectOneMenu id="types" value="#{trafficManagedBean.nomType}">
-                                <f:selectItem itemLabel="tous" itemValue="ALL"/>
-                                <f:selectItems value="#{trafficManagedBean.types}" var="type" itemValue="#{type.nomType}" itemLabel="#{type.nomType}"/>
-                            </p:selectOneMenu>
-                        </h:panelGroup>
-                        <p:outputLabel value="type de transaction" for="typeTransaction"/>
-                        <p:selectOneMenu id="typeTransaction" value="#{trafficManagedBean.typeTransaction}">
-                            <f:selectItems value="#{trafficManagedBean.typesTransaction}" var="transactionType" itemValue="#{transactionType}" itemLabel="#{transactionType}"/>
-                        </p:selectOneMenu>
+                    <h:form class="container form-inline">
+                        <div class="row">
+                            <div id="filter-panel" class="collapse filter-panel">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <p:outputLabel class="filter-col" for="de" value=" de : " />
+                                            <p:calendar class="form-control" id="de" value="#{trafficManagedBean.de}"  >
+                                                <p:ajax event="dateSelect" process="@this" update="panelA" />
+                                            </p:calendar>
+                                        </div>
+                                        <h:panelGroup id="panelA" class="form-group">
+                                            <p:outputLabel class="filter-col" style="margin-left:20px;" for="a" value="    a : " />
+                                            <p:calendar class="form-control" id="a" value="#{trafficManagedBean.a}"  mindate="#{trafficManagedBean.de}"/>
+                                        </h:panelGroup>
 
-                        <p:commandButton value="filtrer" update=":form"/>
+                                        <h:panelGroup rendered="#{trafficManagedBean.privilege eq 'ADMINISTRATEUR'}" class="form-group">
+                                            <p:outputLabel for="types" style="margin-left:20px;" value=" type : "  class="filter-col"/>
+                                            <p:selectOneMenu id="types" value="#{trafficManagedBean.nomType}">
+                                                <f:selectItem itemLabel="tous" itemValue="ALL"/>
+                                                <f:selectItems value="#{trafficManagedBean.types}" var="type" itemValue="#{type.nomType}" itemLabel="#{type.nomType}"/>
+                                            </p:selectOneMenu>
+                                        </h:panelGroup>
 
+                                        <h:panelGroup class="form-group">
+                                            <p:outputLabel class="filter-col" style="margin-left:20px;"  value=" type de transaction : " for="typeTransaction"/>
+                                            <p:selectOneMenu  id="typeTransaction" value="#{trafficManagedBean.typeTransaction}">
+                                                <f:selectItems value="#{trafficManagedBean.typesTransaction}" var="transactionType" itemValue="#{transactionType}" itemLabel="#{transactionType}"/>
+                                            </p:selectOneMenu>
+                                        </h:panelGroup>
+                                        <p:commandButton style="margin-left:20px;" class="filter-col" value="filtrer" update=":form"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#filter-panel">
+                            Recherche avancée
+                        </button>
 
                     </h:form>
                     <h:form id="form">
@@ -61,7 +76,7 @@
                                 </p:column>
 
                                 <p:column style="text-align: center">
-                                    <p:commandButton  oncomplete="PF('detailTransaction').show()" value="details" update=":form:dialogId">
+                                    <p:commandButton class="btn-warning" oncomplete="PF('detailTransaction').show()" value="details" update=":form:dialogId">
                                         <f:setPropertyActionListener value="#{transaction}" target="#{trafficManagedBean.transaction}" />
                                     </p:commandButton>
                                 </p:column>

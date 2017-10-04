@@ -37,49 +37,72 @@
                         </p:column>
 
                     </p:dataTable>
-                    <p:commandButton value="Ajouter produit" onclick="PF('insert').show()"/>
+                    <p:commandButton class="btn-success" value="Ajouter produit" onclick="PF('insert').show()"/>
 
 
 
                     <p:dialog header="Nouveau produit" widgetVar="insert">
-                        <p:outputLabel for="ajoutNomProduit" value="nom du produit :" />
-                        <p:inputText id="ajoutNomProduit" required="true" maxlength="20" value="#{produitManagedBean.nomProduit}"/>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <p:outputLabel for="ajoutNomProduit" value="nom du produit:" />
+                            </div>
+                            <div class="col-xs-6">
+                                <p:inputText id="ajoutNomProduit" required="true" maxlength="20" value="#{produitManagedBean.nomProduit}"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <p:outputLabel value="unite :" for="unite"/>
+                            </div>
+                            <div class="col-xs-6">
+                                <p:selectOneMenu id="unite" value="#{produitManagedBean.uniteStockageId}" required="true">
+                                    <f:selectItems value="#{produitManagedBean.unitesStockage}" var="unite" itemLabel="#{unite.nom}" itemValue="#{unite.idUniteStockage}"/>
+                                </p:selectOneMenu>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <p:outputLabel value="type :" for="type"/>
+                            </div>
+                            <div class="col-xs-6">
+                                <p:selectOneMenu id="type" value="#{produitManagedBean.nomType}" required="true" >
+                                    <f:selectItems value="#{produitManagedBean.types}" var="type" itemLabel="#{type.nomType}" itemValue="#{type.nomType}"/>
+                                    <p:ajax event="itemSelect" process="@this" update=":form:categorie"/>
+                                </p:selectOneMenu>
+                            </div>
+                        </div>
 
 
-                        <p:outputLabel value="unite :" for="unite"/>
-                        <p:selectOneMenu id="unite" value="#{produitManagedBean.uniteStockageId}" required="true">
-
-                            <f:selectItems value="#{produitManagedBean.unitesStockage}" var="unite" itemLabel="#{unite.nom}" itemValue="#{unite.idUniteStockage}"/>
-                        </p:selectOneMenu>
-
-                        <p:outputLabel value="type :" for="type"/>
-                        <p:selectOneMenu id="type" value="#{produitManagedBean.nomType}" required="true" >
-
-                            <f:selectItems value="#{produitManagedBean.types}" var="type" itemLabel="#{type.nomType}" itemValue="#{type.nomType}"/>
-                            <p:ajax event="itemSelect" process="@this" update="categorie"/>
-                        </p:selectOneMenu>
-
-
-
-                        <h:panelGroup id="categorie">
-                            <p:outputLabel value="categorie : " for="ajoutCategorie"/>
-                            <p:selectOneMenu id="ajoutCategorie"  value="#{produitManagedBean.nomCategorie}" required="true">
-                                <f:selectItem itemLabel="Selectionnez une categorie"/>
-                                <f:selectItems value="#{produitManagedBean.categories}" var="categorie" itemLabel="#{categorie.nomCategorie}" itemValue="#{categorie.nomCategorie}"/>
-                                <p:ajax event="itemSelect" update="sousCategorie" resetValues="true"/>
-                            </p:selectOneMenu>
+                        <h:panelGroup class="row" id="categorie">
+                            <h:panelGroup class="col-xs-4">
+                                <p:outputLabel value="categorie : " for="ajoutCategorie"/>
+                            </h:panelGroup>
+                            <h:panelGroup class="col-xs-6">
+                                <p:selectOneMenu id="ajoutCategorie"  value="#{produitManagedBean.nomCategorie}" required="true">
+                                    <f:selectItem itemLabel="Selectionnez une categorie"/>
+                                    <f:selectItems value="#{produitManagedBean.categories}" var="categorie" itemLabel="#{categorie.nomCategorie}" itemValue="#{categorie.nomCategorie}"/>
+                                    <p:ajax event="itemSelect" update="sousCategorie" resetValues="true"/>
+                                </p:selectOneMenu>
+                            </h:panelGroup>
                         </h:panelGroup>
 
 
-                        <h:panelGroup  id="sousCategorie">
-                            <p:outputLabel value="sousCategorie : " for="ajoutSousCategorie"/>
-                            <p:selectOneMenu id="ajoutSousCategorie" value="#{produitManagedBean.nomSousCategorie}" required="true">
-                                <f:selectItem itemLabel="Selectionnez une sous categorie"/>
-                                <f:selectItems value="#{produitManagedBean.sousCategories}" var="sousCategorie" itemLabel="#{sousCategorie.nom}" itemValue="#{sousCategorie.nom}"/>
-                            </p:selectOneMenu>
+
+                        <h:panelGroup class="row" id="sousCategorie">
+                            <h:panelGroup class="col-xs-4">
+                                <p:outputLabel value="sousCategorie : " for="ajoutSousCategorie"/>
+                            </h:panelGroup>
+                            <h:panelGroup class="col-xs-6">
+                                <p:selectOneMenu id="ajoutSousCategorie" value="#{produitManagedBean.nomSousCategorie}" required="true">
+                                    <f:selectItem itemLabel="Selectionnez une sous categorie"/>
+                                    <f:selectItems value="#{produitManagedBean.sousCategories}" var="sousCategorie" 
+                                                   itemLabel="#{sousCategorie.nom}" itemValue="#{sousCategorie.nom}"/>
+                                </p:selectOneMenu>
+                            </h:panelGroup>
                         </h:panelGroup>
 
-                        <p:commandButton value="ajouter" actionListener="#{produitManagedBean.ajouterProduit()}" onclick="PF('insert').hide()" update="@form"/> 
+
+                        <p:commandButton class="btn-success" value="ajouter" actionListener="#{produitManagedBean.ajouterProduit()}" onclick="PF('insert').hide()" update="@form"/> 
                     </p:dialog>
                 </h:form>
             </ui:define>

@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 @ManagedBean
 @ViewScoped
 public class TrafficManagedBean implements Serializable {
+
     @EJB
     UtilisateursFacade utilisateurFacade;
     @EJB
@@ -43,16 +44,16 @@ public class TrafficManagedBean implements Serializable {
     TypeFacade typeFacade;
     @EJB
     LigneCommandeFacade ligneCommandeFacade;
-    
+
     private Collection<Transactions> transactions = new ArrayList();
-    private java.util.Date de ;
-    private java.util.Date a ;
+    private java.util.Date de;
+    private java.util.Date a;
     private Collection<Type> types;
     private String nomType;
     private String typeTransaction;
     private ArrayList<String> typesTransaction = new ArrayList();
     private Transactions transaction;
-    private Collection<LigneCommande> lignesCommande ;
+    private Collection<LigneCommande> lignesCommande;
     private String headerPath;
 
     public String getHeaderPath() {
@@ -62,10 +63,6 @@ public class TrafficManagedBean implements Serializable {
     public void setHeaderPath(String headerPath) {
         this.headerPath = headerPath;
     }
-    
-    
-    
-    
 
     public Transactions getTransaction() {
         return transaction;
@@ -73,27 +70,23 @@ public class TrafficManagedBean implements Serializable {
 
     public void setTransaction(Transactions transaction) {
         this.transaction = transaction;
-       
+
     }
 
     public Collection<LigneCommande> getLignesCommande() {
-        if(transaction != null){
-            
-           
+        if (transaction != null) {
+
             return ligneCommandeFacade.getParIdTransaction(transaction.getIdTransaction());
+        } else {
+            return new ArrayList();
         }
-        else return new ArrayList();
     }
 
     public void setLignesCommande(Collection<LigneCommande> lignesCommande) {
         this.lignesCommande = lignesCommande;
-        
-    }
-    
 
-  
-    
-    
+    }
+
     public String getTypeTransaction() {
         return typeTransaction;
     }
@@ -101,8 +94,7 @@ public class TrafficManagedBean implements Serializable {
     public void setTypeTransaction(String typeTransaction) {
         this.typeTransaction = typeTransaction;
     }
-    
-    
+
     public String getNomType() {
         return nomType;
     }
@@ -119,34 +111,34 @@ public class TrafficManagedBean implements Serializable {
         this.privilege = privilege;
     }
 
-    
-    
     private String privilege;
-    
-    
+
     public java.util.Date getDe() {
-        return  de;
+        return de;
     }
 
-    public void setDe( java.util.Date de) {
+    public void setDe(java.util.Date de) {
         System.out.println("dddddddddddddddddddddddddddd");
         this.de = de;
-        
+
     }
 
     public java.util.Date getA() {
         return a;
     }
 
-    public void setA( java.util.Date a) {
+    public void setA(java.util.Date a) {
         this.a = a;
-        
+
     }
 
     public Collection<Type> getTypes() {
-        if(privilege.equals("ADMINISTRATEUR")){
+        System.out.println("typpppes de transaction");
+        if (privilege.equals("ADMINISTRATEUR")) {
+            System.out.println("admin transaction");
             return typeFacade.findAll();
-        }else {
+        } else {
+            System.out.println("not admin");
             Collection<Type> l = new ArrayList();
             l.add(typeFacade.getParNom(nomType));
             return l;
@@ -154,35 +146,18 @@ public class TrafficManagedBean implements Serializable {
     }
 
     public void setTypes(Collection<Type> types) {
-        
+
         this.types = types;
     }
 
-   
-    
-    
-
-   
-    
-    
     public Collection<Transactions> getTransactions() {
-      
-      return transactionFacade.geAvecFiltre(nomType,typeTransaction, de, a);
-      
+
+        return transactionFacade.geAvecFiltre(nomType, typeTransaction, de, a);
+
     }
 
     public void setTransactions(Collection<Transactions> transactions) {
         this.transactions = transactions;
-    }
-  
-    
-    
-
-    
-    
-    @PostConstruct
-    public void init() {
-      
     }
 
     public ArrayList<String> getTypesTransaction() {
@@ -193,38 +168,33 @@ public class TrafficManagedBean implements Serializable {
         this.typesTransaction = typesTransaction;
     }
 
-    
-    
-  
+    @PostConstruct
+    public void init() {
 
-    public TrafficManagedBean() {
-        typesTransaction= new ArrayList();
+        /* HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
+                .getRequest();
+        String privilege = request.getParameter("privilege");*/
         typesTransaction.add("tous");
         typesTransaction.add("ENTREE");
         typesTransaction.add("SORTIE");
-        
-          if(FacesContext.getCurrentInstance().getExternalContext().isUserInRole("AdminRole")){
+
+        if (FacesContext.getCurrentInstance().getExternalContext().isUserInRole("AdminRole")) {
             privilege = "ADMINISTRATEUR";
-            setHeaderPath("/template/common/commonAdminLayout.xhtml" );
-        }else{
+            setHeaderPath("/template/common/commonAdminLayout.xhtml");
+        } else {
             String name = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal().getName();
-              System.out.println("nom utilisateur (mail)  "+ name);
             Type t = typeFacade.getParEmailUtilisateur(name);
-            privilege  = t.getNomType();
-            setHeaderPath("/template/common/commonLayout.xhtml" );
+            privilege = t.getNomType();
+            setHeaderPath("/template/common/commonLayout.xhtml");
         }
-       
-        if(!privilege.equals("ADMINISTRATEUR")){
+
+        if (!privilege.equals("ADMINISTRATEUR")) {
             nomType = privilege;
-        }else{
+        } else {
             nomType = "ALL";
         }
-        typeTransaction= "tous";
-        
-       
-                
+        typeTransaction = "tous";
+
     }
 
-  
-    
 }

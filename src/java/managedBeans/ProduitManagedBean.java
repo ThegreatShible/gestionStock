@@ -140,7 +140,7 @@ public class ProduitManagedBean implements Serializable {
        
             if(nomType != null){
            
-            
+                System.out.println(nomType + " nomType dans produtiManagedBean -> categorie");
             categories= categorieFacade.getParNomType(nomType);
             
             for(Categorie c : categories){

@@ -17,6 +17,7 @@
             <ui:define name="content">
 
 
+                <h:messages globalOnly="true"/>
                 <h:form class="container">
                     <p:dataTable value="#{typeManagedBean.types}" var="type" rowIndexVar="r">
                         <f:facet name="header">
@@ -29,7 +30,7 @@
                         </p:column>
 
                         <p:column>  
-                            <p:commandButton class="btn-warning" value="voir categories" process="@this" action="categories.xhtml" >
+                            <p:commandButton class="btn-warning" value="voir categories" action="categories.xhtml" process="@this" immediate="true" ajax="false">
                                 <f:param name="idType" value="#{type.idType.toString()}"/>
                             </p:commandButton>
                         </p:column>
@@ -42,7 +43,7 @@
                     <p:dialog header="Nouveau type" widgetVar="insert">
                         <p:outputLabel for="AjoutNomType" value="nom"/>
                         <p:inputText id="AjoutNomType" value="#{typeManagedBean.type.nomType}" maxlength="20" required="true" />
-                        <p:commandButton class="btn btn-success" value="ajouter" actionListener="#{typeManagedBean.addType()}" onclick="PF('insert').hide()" update="@form"/>
+                        <p:commandButton class="btn-success" value="ajouter" actionListener="#{typeManagedBean.addType()}" onclick="PF('insert').hide()" update="@form"/>
                     </p:dialog>
                 </h:form>
             </ui:define>

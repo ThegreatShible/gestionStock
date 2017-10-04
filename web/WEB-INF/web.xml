@@ -31,11 +31,13 @@
         <web-resource-collection>
             <web-resource-name>Admin</web-resource-name>
             <description/>
-            <url-pattern>/adminPages/*</url-pattern>
-            <url-pattern>/bothPages/*</url-pattern>
-            <url-pattern>/faces/adminPages/*</url-pattern>
-            <url-pattern>/faces/bothPages/*</url-pattern>
             <url-pattern>/*</url-pattern>
+            <url-pattern>/faces/*</url-pattern>
+            <url-pattern>/adminPages/*</url-pattern>
+            <url-pattern>/faces/adminPages/*</url-pattern>
+            <url-pattern>/bothPages/*</url-pattern>
+            <url-pattern>/faces/bothPages/*</url-pattern>
+            
         </web-resource-collection>
         <auth-constraint>
             <description/>
@@ -49,6 +51,8 @@
             <description/>
             <url-pattern>/*</url-pattern>
             <url-pattern>/faces/*</url-pattern>
+            <url-pattern>/bothPages/*</url-pattern>
+            <url-pattern>/faces/bothPages/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>

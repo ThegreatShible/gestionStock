@@ -22,22 +22,22 @@
                     </div>
                     <div id="navbar" class="navbar-collapse collapse pad-right-15" aria-expanded="false" style="height: 1px;">
                         <ul class="nav navbar-nav navbar-right">
-                             <li>
+                            <li>
                                 <a href="/templ/faces/userPages/entrees.xhtml">
                                     <i>Creation entree</i>
                                 </a>
                             </li>
-                             <li>
+                            <li>
                                 <a href="/templ/faces/userPages/sorties.xhtml">
                                     <i>Creation sortie</i>
                                 </a>
                             </li>
-                             <li>
+                            <li>
                                 <a href="/templ/faces/bothPages/EtatStock.xhtml">
                                     <i>Etat du stock</i>
                                 </a>
                             </li>
-                             <li>
+                            <li>
                                 <a href="/templ/faces/bothPages/traffic.xhtml">
                                     <i>Traffic</i>
                                 </a>
@@ -49,20 +49,16 @@
                                     <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a href="#">
+                                        <p:commandLink action="#{logoutManagedBean.redirect()}">
                                             <i class="material-icons drop-icons text-danger">power_settings_new</i>
                                             Déconnexion
-                                        </a>
+                                        </p:commandLink>
                                     </li>
                                 </ul>
                             </li>
-                            <li>
-                                <h:form>
-                                    <p:commandLink value="deconnexion"  action="#{logoutManagedBean.redirect()}"/>
-                                </h:form>
-                            </li>
+
                         </ul>
-                        
+
                     </div><!--/.nav-collapse -->
                 </div>
             </nav>
@@ -70,10 +66,10 @@
             <br/>
 
 
-           <!-- <div class="row header-cover-container"/>
-                <div class="header-filter-cover"></div>
-                <div class="header-cover"></div>
-            </div> !-->
+            <!-- <div class="row header-cover-container"/>
+                 <div class="header-filter-cover"></div>
+                 <div class="header-cover"></div>
+             </div> !-->
 
         </ui:composition>
     </h:body>

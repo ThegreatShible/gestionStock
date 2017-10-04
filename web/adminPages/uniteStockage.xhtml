@@ -21,11 +21,10 @@
                                 <p:outputLabel value="#{ligne.nom}"/>
                             </p:column>
                             <p:column>
-                                <p:commandButton value="modifier" oncomplete="PF('modifier').show()" update=":form:modifierDialog" process="@this">
+                                <p:commandButton class="btn-warning" value="modifier" oncomplete="PF('modifier').show()" update=":form:modifierDialog" process="@this">
                                     <f:setPropertyActionListener target="#{uniteStockageManagedBean.modifUniteStockage}" value="#{ligne}"/>
                                 </p:commandButton>
                             </p:column>
-
                         </p:dataTable>
                     </h:panelGroup>
 

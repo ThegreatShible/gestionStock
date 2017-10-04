@@ -43,25 +43,49 @@
                         </p:dataTable>
                         <h:panelGroup id="modifierDialog">
                             <p:dialog header="modification de fournisseur" widgetVar="modifier1">
-                                <div class="form-group">
-                                    <p:outputLabel value="nom" for="nomM" class="control-label"/>
-                                    <p:outputLabel id="nomM" value="#{fournisseurManagedBean.modifFournisseur.nom}"  />
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="col-xs-4">
+                                            <p:outputLabel  value="nom : " for="nomM" />
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <p:outputLabel id="nomM" style="margin-left:20px" value="#{fournisseurManagedBean.modifFournisseur.nom}"/>
+                                        </div>
 
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="col-xs-4">
+                                            <p:outputLabel value="adresse" for="adresseM"/>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <p:inputText id="adresseM" style="margin-left:20px" value="#{fournisseurManagedBean.modifFournisseur.adresse}" maxlength="50"  /></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="col-xs-4">
+                                            <p:outputLabel value="numero telephone" for="numeroTelephoneM"/>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <p:inputText id="numeroTelephoneM" style="margin-left:20px" value="#{fournisseurManagedBean.modifFournisseur.numeroTelephone}" maxlength="20"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="col-xs-4">
+                                            <p:outputLabel value="email" for="emailM" />
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <p:inputText id="emailM" style="margin-left:20px" value="#{fournisseurManagedBean.modifFournisseur.email}" type="email" maxlength="50"/>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <p:outputLabel value="adresse" for="adresseM" class="control-label"/>
-                                    <p:inputText id="adresseM" value="#{fournisseurManagedBean.modifFournisseur.adresse}" maxlength="50"  />
+                                    <p:commandButton  class="btn-success" value="Modifier" actionListener="#{fournisseurManagedBean.modifierFournisseur()}"  update=":form:table" process=":form:modifierDialog"/>                        
                                 </div>
-                                <div class="form-group">
-                                    <p:outputLabel value="numero telephone" for="numeroTelephoneM" class="control-label"/>
-                                    <p:inputText id="numeroTelephoneM" value="#{fournisseurManagedBean.modifFournisseur.numeroTelephone}" maxlength="20"/>
-                                </div>
-                                <div class="form-group">
-                                    <p:outputLabel value="email" for="emailM" class="control-label"/>
-                                    <p:inputText id="emailM" value="#{fournisseurManagedBean.modifFournisseur.email}" type="email" maxlength="50"/>
-                                </div>
-                                <div class="form-group">
-                                    <p:commandButton  class="btn-success" value="Modifier" actionListener="#{fournisseurManagedBean.modifierFournisseur()}"  update=":form:table" process=":form:modifierDialog"/>                        </div>
 
                             </p:dialog>
                         </h:panelGroup>

@@ -63,7 +63,7 @@
                         </h:panelGroup>
                     </h:panelGroup>
                     <p:commandButton value="Ajouter produit" onclick="PF('insert').show()" />
-                    <p:commandButton value="Confirmer l'entree" actionListener="#{entreeManagedBean.ajouterEntree()}"/>
+                    <p:commandButton value="Confirmer l'entree" actionListener="#{entreeManagedBean.ajouterEntree()}" />
                     <h:panelGroup id="insererDialog">
                         <p:dialog widgetVar="insert" header="ajouter une ligne">
                             <p:outputLabel  value="produit"/>

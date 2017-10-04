@@ -29,9 +29,9 @@ import javax.ejb.EJB;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.naming.InitialContext;
-
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.UserTransaction;
@@ -134,7 +134,7 @@ public class EntreeManagedBean implements Serializable {
     }
 
     public Collection<Produit> getProduits() {
-   
+
         return produitFacade.getParType(privilege);
 
     }
@@ -185,7 +185,7 @@ public class EntreeManagedBean implements Serializable {
         } else {
             throw new Exception("la quantite doit etre strictement positive");
         }
-        quantite= 0;
+        quantite = 0;
         prixUnitaire = 0;
 
     }
@@ -222,16 +222,16 @@ public class EntreeManagedBean implements Serializable {
         if (!lignesCommande.values().isEmpty()) {
             transaction.setTypeTransaction(transactionType.name());
             Fournisseur fournisseur = fournisseurFacade.find(fournisseurId);
-            Type type = typeFacade.getParNom(privilege);            
+            Type type = typeFacade.getParNom(privilege);
             transaction.setIdType(type);
             transaction.setIdFournisseur(fournisseur);
-            
+
             long time = System.currentTimeMillis();
             transaction.setDateTransaction(new Date(time));
             System.out.println("entree avant creation :  ");
             transactionFacade.create(transaction);
             System.out.println("fuck fuck fuck    ");
-            System.out.println("this is the transaction :: : : : : " +  transaction);
+            System.out.println("this is the transaction :: : : : : " + transaction);
             for (LigneCommande l : lignesCommande.values()) {
                 LigneCommandePK ligneCommandePK = new LigneCommandePK();
                 ligneCommandePK.setIdTransaction(transaction.getIdTransaction());
@@ -244,14 +244,16 @@ public class EntreeManagedBean implements Serializable {
                 ligneCommandeFacade.create(l);
 
             }
-            
+            ExternalContext oContext = FacesContext.getCurrentInstance().getExternalContext();
+
+            oContext.redirect("/templ/faces/bothPages/traffic.xhtml");
 
         } else {
             throw new Exception("aucune ligne");
         }
 
     }
-    
+
     /*public void ajouterEntree() throws Exception {
 
         if (!lignesCommande.values().isEmpty()) {
@@ -286,7 +288,6 @@ public class EntreeManagedBean implements Serializable {
         }
 
     }*/
-
     public EntreeManagedBean() {
 
     }
@@ -294,21 +295,20 @@ public class EntreeManagedBean implements Serializable {
     @PostConstruct
     public void init() {
 
-      /*  HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
+        /*  HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
                 .getRequest();
         String privilege = request.getParameter("privilege");
         System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa entree manged Bean");
 
         this.privilege = privilege;*/
-      
-      if(FacesContext.getCurrentInstance().getExternalContext().isUserInRole("AdminRole")){
+        if (FacesContext.getCurrentInstance().getExternalContext().isUserInRole("AdminRole")) {
             privilege = "ADMINISTRATEUR";
-            
-        }else{
+
+        } else {
             String name = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal().getName();
             Type t = typeFacade.getParEmailUtilisateur(name);
-            privilege  = t.getNomType();
-            
+            privilege = t.getNomType();
+
         }
 
     }

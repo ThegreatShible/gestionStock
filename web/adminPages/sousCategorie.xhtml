@@ -26,7 +26,7 @@
                         </p:column>
                     </p:dataTable>
                     <p:commandButton value="Ajouter sous-categorie" class="btn-success" onclick="PF('insert2').show()"/>
-                    <p:commandButton value="retour" action="categories" class="btn-warning" process="@this" >
+                    <p:commandButton value="retour" action="categories" class="btn-warning" process="@this" ajax="false" immediate="true" >
                         <f:param name="idType" value="#{sousCategorieMangedBean.typeId}"/>
                     </p:commandButton>
 

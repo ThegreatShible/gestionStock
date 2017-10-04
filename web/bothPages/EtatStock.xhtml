@@ -10,6 +10,23 @@
         <h:outputStylesheet name="bootstrap/css/bootstrap.css"  /> 
         <h:outputStylesheet name="boots-mat/css/bootstrap-material-design.min.css"/>
         <h:outputStylesheet name="boots-mat/css/ripples.min.css"  /> 
+        <h:outputStylesheet name="bootstrap/css/navbar.css"/>
+        <h:outputScript library="js" name="html2canvas.js"/>
+        <h:outputScript library="js" name="jspdf.min.js"/>
+       
+        
+        <script type="text/javascript">
+            function genPDF() {
+                html2canvas(document.body)
+                        .then(function (canvas) {
+                            var img = canvas.toDataURL('image/png');
+                            var doc = new jsPDF();
+                            doc.addImage(img, 'JPEG', 20, 20);
+                            doc.save('test.pdf');
+                        });
+                ﻿
+            }
+        </script>
     </h:head>
     <h:body>
         <ui:composition template="#{stockManagedBean.headerPath}" >
@@ -40,11 +57,13 @@
                     </h:form>
 
                     <h:form>
-                        <p:commandButton value="convertir en pdf" class="btn-success" />  
+                        <p:commandButton value="convertir en pdf" class="btn-success" onclick="javascript:genPDF();" />  
                     </h:form>
+                    <a href="javascript:genPDF()">downloadPDF</a>
                 </h:panelGroup>
             </ui:define>
         </ui:composition>
+        
     </h:body>
 </html>
 

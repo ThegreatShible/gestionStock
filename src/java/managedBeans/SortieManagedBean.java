@@ -27,6 +27,7 @@ import javax.inject.Named;
 import javax.enterprise.context.Dependent;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import models.TransactionType;
@@ -50,7 +51,7 @@ public class SortieManagedBean implements Serializable {
     private LigneCommandeFacade ligneCommandeFacade;
     @EJB
     private DestinationFacade destinationFacade;
-    
+
     @EJB
     private TypeFacade typeFacade;
 
@@ -73,7 +74,6 @@ public class SortieManagedBean implements Serializable {
     public void setLigneCommande(LigneCommande ligneCommande) {
         this.ligneCommande = ligneCommande;
     }
-    
 
     public int getProduitId() {
         return produitId;
@@ -127,12 +127,16 @@ public class SortieManagedBean implements Serializable {
     public void ajouterLigneCommande() throws Exception {
         LigneCommande l = new LigneCommande();
         Produit p = getProduit();
-        if (quantite > p.getQuantiteEnStock() || quantite <=0) {
+        if (quantite > p.getQuantiteEnStock() || quantite <= 0) {
+            System.out.println("proooooooooooobllleeeeeeeeeeeemeeeeeeeeeeeeeeeee");
             throw new Exception("quantite demandee superieure a la quantite en stock ou non strictement positive");
         } else if (lignesCommande.get(p.getIdProduit()) != null) {
-            System.out.println("produit " + p.getNomProduit());
+            
             throw new Exception("produit existant");
         } else {
+            System.out.println("produit " + p.getNomProduit());
+            System.out.println("quantite  ::: "+ quantite);
+            System.out.println("quantite en stock :: "+ p.getQuantiteEnStock());
             l.setIdProduit(p);
             l.setQuantite(quantite);
             lignesCommande.put(p.getIdProduit(), l);
@@ -150,12 +154,12 @@ public class SortieManagedBean implements Serializable {
     }
 
     public void modifierLigne() throws Exception {
-     
+
         if (ligneCommande == null) {
             throw new Exception("produit non trouve");
         } else {
             Produit pr = ligneCommande.getIdProduit();
-            System.out.println("le produit est : "+pr.getNomProduit());
+            System.out.println("le produit est : " + pr.getNomProduit());
             if (modifQuantite > pr.getQuantiteEnStock()) {
                 throw new Exception("la quantite demande excede celle du stock");
             } else {
@@ -173,9 +177,9 @@ public class SortieManagedBean implements Serializable {
 
     public void ajouterSortie() throws Exception {
         if (!lignesCommande.isEmpty()) {
-            
+
             transaction.setTypeTransaction(transactionType.name());
-            
+
             Destination destination = destinationFacade.find(destinationId);
             transaction.setDestination(destination);
             long time = System.currentTimeMillis();
@@ -183,15 +187,17 @@ public class SortieManagedBean implements Serializable {
             Type type = typeFacade.getParNom(privilege);
             transaction.setIdType(type);
             transactionFacade.create(transaction);
-            
+
             for (LigneCommande l : lignesCommande.values()) {
                 l.getLigneCommandePK().setIdTransaction(transaction.getIdTransaction());
                 Produit produit = l.getIdProduit();
-                produit.setQuantiteEnStock(l.getQuantite() - produit.getQuantiteEnStock());
+                produit.setQuantiteEnStock( produit.getQuantiteEnStock() - l.getQuantite());
                 produitFacade.edit(produit);
                 ligneCommandeFacade.create(l);
-                 
+
             }
+            ExternalContext oContext = FacesContext.getCurrentInstance().getExternalContext();
+            oContext.redirect("/templ/faces/bothPages/traffic.xhtml");
         } else {
             throw new Exception("sortie vide");
         }
@@ -235,14 +241,14 @@ public class SortieManagedBean implements Serializable {
 
     @PostConstruct
     public void init() {
-         if(FacesContext.getCurrentInstance().getExternalContext().isUserInRole("AdminRole")){
+        if (FacesContext.getCurrentInstance().getExternalContext().isUserInRole("AdminRole")) {
             privilege = "ADMINISTRATEUR";
-            
-        }else{
+
+        } else {
             String name = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal().getName();
             Type t = typeFacade.getParEmailUtilisateur(name);
-            privilege  = t.getNomType();
-            
+            privilege = t.getNomType();
+
         }
     }
 
